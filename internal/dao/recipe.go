@@ -29,11 +29,7 @@ func (r *RecipeDAO) Create(ctx context.Context, recipe *domain.Recipe) (primitiv
 }
 
 func (r *RecipeDAO) GetByID(ctx context.Context, id primitive.ObjectID) (*domain.Recipe, error) {
-	result, err := r.collection.Find(ctx, bson.M{"_id": id})
-	if err != nil {
-		log.Printf("Error getting recipe by ID: %v", err)
-		return nil, err
-	}
+	result := r.collection.FindOne(ctx, bson.M{"_id": id})
 
 	var recipe domain.Recipe
 	if err := result.Decode(&recipe); err != nil {

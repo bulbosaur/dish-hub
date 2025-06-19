@@ -13,7 +13,7 @@ type Config struct {
 
 func Load() *Config {
 	config := &Config{
-		MongoURI:  getEnv("MONGO_URI", "mongodb://localhost:27017"),
+		MongoURI:  getEnv("MONGO_URI", "mongodb://localhost:27017/dish_hub"),
 		DBName:    getEnv("DB_NAME", "dish_hub"),
 		JWTSecret: getEnv("JWT_SECRET", "supersecretkey"),
 	}
