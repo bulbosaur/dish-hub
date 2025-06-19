@@ -1,4 +1,4 @@
-package repository
+package dao
 
 import (
 	"context"
@@ -23,8 +23,7 @@ func InitDB(cfg config.Config) error {
 		return err
 	}
 
-	err = client.Ping(ctx, nil)
-	if err != nil {
+	if err = client.Ping(ctx, nil); err != nil {
 		return err
 	}
 
@@ -33,4 +32,17 @@ func InitDB(cfg config.Config) error {
 	Client = client
 
 	return nil
+}
+
+func CloseDB() {
+	if Client == nil {
+		return
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	if err := Client.Disconnect(ctx); err != nil {
+		panic(err)
+	}
 }
