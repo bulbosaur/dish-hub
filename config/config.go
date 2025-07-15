@@ -2,37 +2,34 @@ package config
 
 import (
 	"log"
-	"os"
+	"strings"
+
+	"github.com/spf13/viper"
 )
 
-type Config struct {
-	MongoURI  string
-	DBName    string
-	JWTSecret string
+func Init() {
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+	viper.AutomaticEnv()
+
+	viperDefault()
+	logConfig()
 }
 
-func Load() *Config {
-	config := &Config{
-		MongoURI:  getEnv("MONGO_URI", "mongodb://localhost:27017/dish_hub"),
-		DBName:    getEnv("DB_NAME", "dish_hub"),
-		JWTSecret: getEnv("JWT_SECRET", "supersecretkey"),
-	}
+func viperDefault() {
+	viper.SetDefault("jwt.SECRET_KEY", "your_secret_key_here")
+	viper.SetDefault("jwt.TOKEN_TTL_HOURS", 24)
 
-	logConfig(config)
-	return config
+	viper.SetDefault("db.PATH", "./db/dish_hub.db")
+
+	viper.SetConfigName(".env")
+	viper.SetConfigType("env")
+	viper.AddConfigPath("./config")
+
 }
 
-func getEnv(key, defaultValue string) string {
-	value := os.Getenv(key)
-	if value == "" {
-		return defaultValue
-	}
-	return value
-}
-
-func logConfig(config *Config) {
+func logConfig() {
 	log.Printf(
-		"Configuration: MongoURI=%s, DBName=%s, JWTSecret=%s",
-		config.MongoURI, config.DBName, config.JWTSecret,
+		"Configuration: db.PATH=%s,",
+		viper.GetString("db.PATH"),
 	)
 }
