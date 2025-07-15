@@ -6,7 +6,19 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"sync"
 )
+
+// DishHubModel обрабатывает пул подключений к базе данных
+type DishHubModel struct {
+	DB *sql.DB
+	Mu sync.Mutex
+}
+
+// NewDishHbModel создает подключение к переданной базе данных
+func NewDishHubModel(db *sql.DB) *DishHubModel {
+	return &DishHubModel{DB: db}
+}
 
 // InitDB открывает соединение с базой и создаёт необходимые таблицы
 func InitDB(path string) (*sql.DB, error) {
@@ -38,7 +50,9 @@ func InitDB(path string) (*sql.DB, error) {
 		user_id INTEGER,
 		name TEXT NOT NULL,
 		time_minute INTEGER,
-		process TEXT,
+		difficulty TEXT,
+		instructions TEXT,
+		image_url TEXT,
 		FOREIGN KEY(user_id) REFERENCES users(id)
  	);`
 	_, err = db.Exec(createRecipes)
