@@ -22,3 +22,9 @@ type Connection struct {
 type Ingredient struct {
 	Name string `bson:"name" json:"name"`
 }
+
+type User struct {
+	ID           int    `json:"id"`
+	Login        string `json:"login"`
+	PasswordHash string `json:"password"`
+}
