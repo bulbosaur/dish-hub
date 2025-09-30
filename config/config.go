@@ -19,6 +19,9 @@ func viperDefault() {
 	viper.SetDefault("jwt.SECRET_KEY", "your_secret_key_here")
 	viper.SetDefault("jwt.TOKEN_TTL_HOURS", 24)
 
+	viper.SetDefault("http.HOST", "localhost")
+	viper.SetDefault("http.PORT", "8080")
+
 	viper.SetDefault("db.PATH", "./db/dish_hub.db")
 
 	viper.SetConfigName(".env")

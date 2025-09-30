@@ -5,6 +5,7 @@ import (
 
 	"github.com/bulbosaur/dish-hub/config"
 	"github.com/bulbosaur/dish-hub/internal/dao"
+	"github.com/bulbosaur/dish-hub/internal/domain"
 	"github.com/spf13/viper"
 
 	_ "modernc.org/sqlite"
@@ -20,32 +21,32 @@ func main() {
 
 	defer db.Close()
 
-	_ = dao.NewDishHubModel(db)
+	Repo := dao.NewDishHubModel(db)
 
-	// newUser := domain.User{
-	// 	Login:        "admin1",
-	// 	PasswordHash: "admin",
-	// }
+	newUser := domain.User{
+		Login:        "admin1",
+		PasswordHash: "admin",
+	}
 
-	// uId, err := Repo.CreateUser(newUser)
-	// if err != nil {
-	// 	log.Fatalf("failed to create user: %v", err)
-	// }
+	uId, err := Repo.CreateUser(newUser)
+	if err != nil {
+		log.Fatalf("failed to create user: %v", err)
+	}
 
-	// newRes := domain.Recipe{
-	// 	Name:         "омлет",
-	// 	TimeMinute:   5,
-	// 	Difficulty:   "easy",
-	// 	Ingredients:  []domain.Ingredient{{Name: "яйца"}},
-	// 	Categories:   []string{"завтрак"},
-	// 	Instructions: "разбить яйца в сковороду",
-	// 	UserID:       uId,
-	// }
+	newRes := domain.Recipe{
+		Name:         "омлет",
+		TimeMinute:   5,
+		Difficulty:   "easy",
+		Ingredients:  []domain.Ingredient{{Name: "яйца"}},
+		Categories:   []string{"завтрак"},
+		Instructions: "разбить яйца в сковороду",
+		UserID:       uId,
+	}
 
-	// id, err := Repo.Insert(newRes)
-	// if err != nil {
-	// 	log.Fatalf("failed to insert recipe: %v", err)
-	// }
+	id, err := Repo.Insert(newRes)
+	if err != nil {
+		log.Fatalf("failed to insert recipe: %v", err)
+	}
 
-	// log.Printf("Inserted recipe with ID: %d", id)
+	log.Printf("Inserted recipe with ID: %d", id)
 }
